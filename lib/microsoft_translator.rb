@@ -5,10 +5,8 @@ require 'net/http'
 require 'json'
 
 module MicrosoftTranslator
-  class Error < StandardError; end
-
   class TranslationApi
-    def initialize(subscription_key, region)
+    def initialize(subscription_key = nil, region = nil)
       @subscription_key = subscription_key
       @region = region
     end
@@ -17,10 +15,12 @@ module MicrosoftTranslator
       uri = URI("https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=#{to}")
       uri.query = URI.encode_www_form({ "api-version" => "3.0", "to" => to })
       request = Net::HTTP::Post.new(uri)
-      request["Ocp-Apim-Subscription-Key"] = @subscription_key
-      request["Ocp-Apim-Subscription-Region"] = @region
+
+      # Use subscription key and region if provided, otherwise use configured values
+      request["Ocp-Apim-Subscription-Key"] = @subscription_key || MicrosoftTranslator.configuration.subscription_key
+      request["Ocp-Apim-Subscription-Region"] = @region || MicrosoftTranslator.configuration.region
+
       request["Content-type"] = "application/json"
-      request["Content-length"] = text.length
       request.body = [{ "Text" => text }].to_json
 
       response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do | http |
