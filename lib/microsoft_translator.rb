@@ -30,8 +30,8 @@ module MicrosoftTranslator
     end
 
     def translate(text, to, from = nil)
-      uri = URI("https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=#{to}")
-      uri.query = URI.encode_www_form({ "api-version" => "3.0", "to" => to })
+      uri = URI("https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=#{to}&from=#{from}")
+      uri.query = URI.encode_www_form({ "api-version" => "3.0", "to" => to, "from" => from })
       request = Net::HTTP::Post.new(uri)
 
       # Use subscription key and region if provided, otherwise use configured values
