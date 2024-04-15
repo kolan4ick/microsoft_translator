@@ -5,6 +5,24 @@ require 'net/http'
 require 'json'
 
 module MicrosoftTranslator
+  class << self
+    attr_accessor :configuration
+  end
+
+  def self.configure
+    self.configuration ||= Configuration.new
+    yield(configuration)
+  end
+
+  class Configuration
+    attr_accessor :subscription_key, :region
+
+    def initialize
+      @subscription_key = nil
+      @region = nil
+    end
+  end
+
   class TranslationApi
     def initialize(subscription_key = nil, region = nil)
       @subscription_key = subscription_key
