@@ -35,8 +35,8 @@ module MicrosoftTranslator
       request = Net::HTTP::Post.new(uri)
 
       # Use subscription key and region if provided, otherwise use configured values
-      request["Ocp-Apim-Subscription-Key"] = @subscription_key || MicrosoftTranslator.configuration.subscription_key
-      request["Ocp-Apim-Subscription-Region"] = @region || MicrosoftTranslator.configuration.region
+      request["Ocp-Apim-Subscription-Key"] = @subscription_key || MicrosoftTranslator.configuration&.subscription_key
+      request["Ocp-Apim-Subscription-Region"] = @region || MicrosoftTranslator.configuration&.region
 
       request["Content-type"] = "application/json"
       request.body = [{ "Text" => text }].to_json
@@ -45,8 +45,12 @@ module MicrosoftTranslator
         http.request(request)
       end
 
+      if response.code != "200"
+        raise "Error: #{response.code} - #{response.body}"
+      end
+
       # Get only the first translation
-      JSON.parse(response.body)[0]["translations"][0]["text"]
+      JSON.parse(response.body)&.dig(0, "translations", 0, "text")
     end
   end
 end

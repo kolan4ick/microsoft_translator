@@ -6,6 +6,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    dotenv (3.1.0)
     json (2.7.2)
     minitest (5.22.3)
     net-http (0.1.1)
@@ -15,19 +16,20 @@ GEM
       timeout
     rake (13.2.0)
     timeout (0.4.1)
-    uri (0.11.0)
+    uri (0.13.0)
 
 PLATFORMS
   ruby
   x86_64-linux
 
 DEPENDENCIES
+  dotenv
   json (~> 2.5)
   microsoft_translator!
   minitest (~> 5.16)
   net-http (~> 0.1.1)
   rake (~> 13.0)
-  uri (~> 0.10)
+  uri (~> 0.13)
 
 BUNDLED WITH
    2.5.9
